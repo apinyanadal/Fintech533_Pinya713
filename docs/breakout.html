@@ -120,31 +120,29 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#strategy-overview" id="toc-strategy-overview" class="nav-link active" data-scroll-target="#strategy-overview">Strategy Overview</a></li>
-  <li><a href="#strategy-logic" id="toc-strategy-logic" class="nav-link" data-scroll-target="#strategy-logic">Strategy Logic</a></li>
+  <li><a href="#strategy-logic" id="toc-strategy-logic" class="nav-link active" data-scroll-target="#strategy-logic">Strategy Logic</a></li>
   <li><a href="#asset-selection" id="toc-asset-selection" class="nav-link" data-scroll-target="#asset-selection">Asset Selection</a></li>
-  <li><a href="#breakout-definition" id="toc-breakout-definition" class="nav-link" data-scroll-target="#breakout-definition">Breakout Definition</a></li>
-  <li><a href="#performance-summary" id="toc-performance-summary" class="nav-link" data-scroll-target="#performance-summary">Performance Summary</a></li>
+  <li><a href="#breakout-detection-function" id="toc-breakout-detection-function" class="nav-link" data-scroll-target="#breakout-detection-function">Breakout Detection Function</a></li>
+  <li><a href="#assumptions-replication-notes" id="toc-assumptions-replication-notes" class="nav-link" data-scroll-target="#assumptions-replication-notes">Assumptions &amp; Replication Notes</a></li>
+  <li><a href="#performance-metrics" id="toc-performance-metrics" class="nav-link" data-scroll-target="#performance-metrics">Performance Metrics</a></li>
   <li><a href="#equity-curve" id="toc-equity-curve" class="nav-link" data-scroll-target="#equity-curve">Equity Curve</a></li>
   <li><a href="#drawdown" id="toc-drawdown" class="nav-link" data-scroll-target="#drawdown">Drawdown</a></li>
   <li><a href="#trade-outcome-analysis" id="toc-trade-outcome-analysis" class="nav-link" data-scroll-target="#trade-outcome-analysis">Trade Outcome Analysis</a></li>
   <li><a href="#trade-blotter" id="toc-trade-blotter" class="nav-link" data-scroll-target="#trade-blotter">Trade Blotter</a></li>
   <li><a href="#market-comparison" id="toc-market-comparison" class="nav-link" data-scroll-target="#market-comparison">Market Comparison</a>
   <ul class="collapse">
-  <li><a href="#strategy-vs-qqq" id="toc-strategy-vs-qqq" class="nav-link" data-scroll-target="#strategy-vs-qqq">Strategy vs QQQ</a></li>
-  <li><a href="#strategy-vs-spy" id="toc-strategy-vs-spy" class="nav-link" data-scroll-target="#strategy-vs-spy">Strategy vs SPY</a></li>
+  <li><a href="#strategy-vs-qqq-per-trade-log-returns" id="toc-strategy-vs-qqq-per-trade-log-returns" class="nav-link" data-scroll-target="#strategy-vs-qqq-per-trade-log-returns">Strategy vs QQQ (per-trade log returns)</a></li>
+  <li><a href="#strategy-vs-spy-per-trade-log-returns" id="toc-strategy-vs-spy-per-trade-log-returns" class="nav-link" data-scroll-target="#strategy-vs-spy-per-trade-log-returns">Strategy vs SPY (per-trade log returns)</a></li>
   </ul></li>
-  <li><a href="#summary-table" id="toc-summary-table" class="nav-link" data-scroll-target="#summary-table">Summary Table</a></li>
   <li><a href="#analysis-commentary" id="toc-analysis-commentary" class="nav-link" data-scroll-target="#analysis-commentary">Analysis &amp; Commentary</a>
   <ul class="collapse">
   <li><a href="#did-the-strategy-work" id="toc-did-the-strategy-work" class="nav-link" data-scroll-target="#did-the-strategy-work">Did the strategy work?</a></li>
   <li><a href="#why-did-the-losing-trades-lose" id="toc-why-did-the-losing-trades-lose" class="nav-link" data-scroll-target="#why-did-the-losing-trades-lose">Why did the losing trades lose?</a></li>
   <li><a href="#why-did-the-winning-trades-win" id="toc-why-did-the-winning-trades-win" class="nav-link" data-scroll-target="#why-did-the-winning-trades-win">Why did the winning trades win?</a></li>
-  <li><a href="#what-does-the-alphabeta-analysis-show" id="toc-what-does-the-alphabeta-analysis-show" class="nav-link" data-scroll-target="#what-does-the-alphabeta-analysis-show">What does the alpha/beta analysis show?</a></li>
-  <li><a href="#why-is-donchian-breakout-harder-on-equities-than-commodities" id="toc-why-is-donchian-breakout-harder-on-equities-than-commodities" class="nav-link" data-scroll-target="#why-is-donchian-breakout-harder-on-equities-than-commodities">Why is Donchian breakout harder on equities than commodities?</a></li>
+  <li><a href="#what-does-the-alphabeta-comparison-show" id="toc-what-does-the-alphabeta-comparison-show" class="nav-link" data-scroll-target="#what-does-the-alphabeta-comparison-show">What does the alpha/beta comparison show?</a></li>
+  <li><a href="#why-is-breakout-trading-harder-on-equities-than-commodities" id="toc-why-is-breakout-trading-harder-on-equities-than-commodities" class="nav-link" data-scroll-target="#why-is-breakout-trading-harder-on-equities-than-commodities">Why is breakout trading harder on equities than commodities?</a></li>
   <li><a href="#how-would-you-improve-the-model" id="toc-how-would-you-improve-the-model" class="nav-link" data-scroll-target="#how-would-you-improve-the-model">How would you improve the model?</a></li>
   </ul></li>
-  <li><a href="#assumptions-reproducibility" id="toc-assumptions-reproducibility" class="nav-link" data-scroll-target="#assumptions-reproducibility">Assumptions &amp; Reproducibility</a></li>
   </ul>
 </nav>
     </div>
@@ -183,9 +181,15 @@ ul.task-list li input[type="checkbox"] {
   .filter-card h4 { color: #00d97e; margin: 0 0 0.4rem 0; }
   .metric-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     margin: 1.5rem 0;
+  }
+  .metric-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 0 0 1.5rem 0;
   }
   .metric-box {
     background: #1a1a2e;
@@ -196,6 +200,7 @@ ul.task-list li input[type="checkbox"] {
   }
   .metric-box .value { font-size: 1.6rem; font-weight: 700; color: #00d4ff; }
   .metric-box .label { font-size: 0.8rem; color: #888; margin-top: 4px; }
+  .metric-box .explanation { font-size: 0.75rem; color: #aaa; margin-top: 6px; line-height: 1.4; }
   .outcome-badge {
     display: inline-block;
     padding: 3px 10px;
@@ -207,107 +212,209 @@ ul.task-list li input[type="checkbox"] {
   .badge-success  { background:#00d97e22; color:#00d97e; border:1px solid #00d97e; }
   .badge-stop     { background:#ff444422; color:#ff4444; border:1px solid #ff4444; }
   .badge-timeout  { background:#f0a50022; color:#f0a500; border:1px solid #f0a500; }
+  .assumption-box {
+    background: #111127;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 1rem 1.4rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    color: #ccc;
+  }
+  .assumption-box b { color: #00d4ff; }
 </style>
-<section id="strategy-overview" class="level2">
-<h2 class="anchored" data-anchor-id="strategy-overview">Strategy Overview</h2>
-<p>This page documents a systematic long/short breakout strategy applied to <strong>QQQ (Invesco Nasdaq-100 ETF)</strong>, built on the foundation of the legendary <strong>Turtle Trading System</strong> developed by Richard Dennis in the 1980s, and enhanced with two modern filters to reduce whipsaw losses.</p>
-<hr>
-</section>
 <section id="strategy-logic" class="level2">
 <h2 class="anchored" data-anchor-id="strategy-logic">Strategy Logic</h2>
-<p>The strategy identifies moments when QQQ’s price decisively breaks out of a multi-week trading range and enters a position to ride the emerging trend.</p>
-<p><strong>Entry signal:</strong> A Donchian Channel breakout. A close above the highest high of the previous 20 bars triggers a long entry the next morning at the open. A close below the lowest low triggers a short entry. All lookbacks use <code>.shift(1)</code> so today’s bar never influences its own signal.</p>
-<p><strong>Two filters gate every signal:</strong></p>
-<section id="filter-1-choppiness-index-65" class="level4 filter-card">
-<h4 class="anchored" data-anchor-id="filter-1-choppiness-index-65">Filter 1 · Choppiness Index &lt; 65</h4>
-<p>Developed by E.W. Dreiss using fractal geometry, this indicator measures whether price is behaving like a directional trend (low values) or random noise (high values). Above 65 means choppy regime — all signals skipped.</p>
-</section>
-<section id="filter-2-volume-1.0x-20-day-average" class="level4 filter-card">
-<h4 class="anchored" data-anchor-id="filter-2-volume-1.0x-20-day-average">Filter 2 · Volume &gt; 1.0x 20-Day Average</h4>
-<p>A breakout on below-average volume has no institutional participation behind it. Volume must exceed its 20-day average before any signal is acted on.</p>
-</section>
-<p><strong>Exit rules in priority order:</strong> Stop-loss at 3xATR(14), Donchian exit when close crosses opposite 20-day channel, Timeout after 20 trading days at market close.</p>
+<p>This strategy is a long/short trend-following system built on the Donchian Channel breakout framework, originally popularized by the Turtle Trading experiment of the 1980s. The core idea is simple: when a market makes a new multi-week high or low, it is signaling the potential start of a new directional trend — and the strategy takes a position in that direction to ride the move. A long position of 75 shares is entered when price closes above its 20-day highest high, and a short position of 75 shares is entered when price closes below its 20-day lowest low. To avoid entering on false breakouts — which are the primary weakness of any breakout system — two filters must be satisfied simultaneously before any trade is taken: the Choppiness Index must confirm the market is in a trending rather than choppy regime, and volume must be above its 20-day average to confirm genuine participation behind the move. Once entered, positions are managed with a stop-loss at 3 times the Average True Range from entry, a Donchian-based exit when price reverses through the opposite channel boundary, and a hard timeout of 20 trading days as a maximum holding period. The backtest rolls forward sequentially through time — each decision only uses data that was available on that day, with no look-ahead into future prices.</p>
 <hr>
 </section>
 <section id="asset-selection" class="level2">
 <h2 class="anchored" data-anchor-id="asset-selection">Asset Selection</h2>
-<p>QQQ was chosen for its extreme liquidity, strong trend-following characteristics during sustained moves, and tradability in both directions — experiencing genuine downtrends in 2022 and early 2025 as well as strong uptrends.</p>
+<p>The strategy was applied to <strong>QQQ (Invesco Nasdaq-100 ETF)</strong>. Several candidate assets were considered, including SPY (S&amp;P 500), IWM (Russell 2000), and GLD (Gold ETF). QQQ was selected for three reasons. First, it has the highest average daily dollar volume of any US equity ETF, which means entry and exit on 75-share lots can be executed with minimal slippage. Second, the Nasdaq-100 has historically exhibited strong momentum characteristics — when it trends, it tends to trend decisively, which is the regime a Donchian breakout system is designed to exploit. Third, unlike individual stocks, QQQ is diversified enough that single-name events (earnings, FDA decisions) do not distort the breakout signals. SPY was rejected because its lower volatility produces fewer and smaller breakouts. IWM was rejected because its higher mean-reversion tendency makes trend-following less reliable. GLD was considered but rejected because ShinyBroker’s data coverage for commodity ETFs over the 2-year window was less consistent.</p>
 <hr>
 </section>
-<section id="breakout-definition" class="level2">
-<h2 class="anchored" data-anchor-id="breakout-definition">Breakout Definition</h2>
+<section id="breakout-detection-function" class="level2">
+<h2 class="anchored" data-anchor-id="breakout-detection-function">Breakout Detection Function</h2>
+<p>The breakout detection function <code>detect_breakout()</code> evaluates a single price bar and returns one of three values: <strong>+1</strong> (enter long), <strong>-1</strong> (enter short), or <strong>0</strong> (no trade). It takes three inputs: the current bar’s data, the Donchian lookback period N, and whether the most recently completed trade was profitable.</p>
+<p>The function checks conditions in this order:</p>
+<section id="condition-1-donchian-channel-breakout" class="level4 filter-card">
+<h4 class="anchored" data-anchor-id="condition-1-donchian-channel-breakout">Condition 1 · Donchian Channel Breakout</h4>
+<p>The current bar’s closing price must exceed the highest high of the previous 20 bars (long signal) or fall below the lowest low of the previous 20 bars (short signal). The channel is always calculated on lagged data — today’s bar is never included in its own channel calculation, preventing any look-ahead bias.</p>
+</section>
+<section id="filter-1-choppiness-index-65" class="level4 filter-card">
+<h4 class="anchored" data-anchor-id="filter-1-choppiness-index-65">Filter 1 · Choppiness Index &lt; 65</h4>
+<p>The Choppiness Index, developed by E.W. Dreiss using Benoit Mandelbrot’s fractal geometry, measures whether a price series is behaving like a directional trend or random noise. It is calculated as: 100 × log10(sum of ATR over N periods / (N-period high − N-period low)) / log10(N). Values above 61.8 indicate a choppy, consolidating market where breakouts statistically fail and whipsaws dominate. We use a threshold of 65 to allow a small buffer. If CHOP ≥ 65 the signal is suppressed entirely.</p>
+</section>
+<section id="filter-2-volume-confirmation" class="level4 filter-card">
+<h4 class="anchored" data-anchor-id="filter-2-volume-confirmation">Filter 2 · Volume Confirmation</h4>
+<p>Today’s volume must exceed its 20-day simple moving average. A breakout on below-average volume reflects thin liquidity rather than genuine directional conviction. Real breakouts — the kind that produce sustained trends — attract above-average participation. This filter rejects low-conviction signals before a position is entered.</p>
+</section>
+<p>All parameter values are defined as named constants at the top of the notebook:</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 43%">
+<col style="width: 30%">
+<col style="width: 26%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Parameter</th>
+<th>Constant</th>
 <th>Value</th>
+<th>Role</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Entry channel</td>
-<td>20-day Donchian</td>
+<td><code>N_ENTRY</code></td>
+<td>20</td>
+<td>Donchian channel lookback for entry</td>
 </tr>
 <tr class="even">
-<td>Exit channel</td>
-<td>20-day Donchian (opposite side)</td>
+<td><code>N_EXIT</code></td>
+<td>20</td>
+<td>Donchian channel lookback for exit</td>
 </tr>
 <tr class="odd">
-<td>Stop-loss</td>
-<td>3 x ATR(14)</td>
+<td><code>ATR_PERIOD</code></td>
+<td>14</td>
+<td>ATR lookback for stop-loss</td>
 </tr>
 <tr class="even">
-<td>Timeout</td>
-<td>20 trading days</td>
+<td><code>ATR_STOP_MULT</code></td>
+<td>3.0</td>
+<td>Stop distance multiplier</td>
 </tr>
 <tr class="odd">
-<td>Choppiness threshold</td>
+<td><code>CHOP_PERIOD</code></td>
+<td>14</td>
+<td>Choppiness Index lookback</td>
+</tr>
+<tr class="even">
+<td><code>CHOP_THRESHOLD</code></td>
 <td>65.0</td>
-</tr>
-<tr class="even">
-<td>Volume filter</td>
-<td>1.0x 20-day average</td>
+<td>Maximum CHOP to allow entry</td>
 </tr>
 <tr class="odd">
-<td>Position size</td>
-<td>75 shares</td>
+<td><code>VOL_MA_PERIOD</code></td>
+<td>20</td>
+<td>Volume moving average period</td>
 </tr>
 <tr class="even">
-<td>Starting capital</td>
-<td>$100,000</td>
+<td><code>VOL_MULT</code></td>
+<td>1.0</td>
+<td>Minimum volume ratio to allow entry</td>
 </tr>
 <tr class="odd">
-<td>Risk-free rate (Sharpe)</td>
-<td>3.75%</td>
+<td><code>TIMEOUT_DAYS</code></td>
+<td>20</td>
+<td>Maximum holding period in trading days</td>
+</tr>
+<tr class="even">
+<td><code>POSITION_SIZE</code></td>
+<td>75</td>
+<td>Fixed shares per trade</td>
+</tr>
+<tr class="odd">
+<td><code>START_CASH</code></td>
+<td>100,000</td>
+<td>Starting account capital ($)</td>
+</tr>
+<tr class="even">
+<td><code>RISK_FREE_RATE</code></td>
+<td>0.0375</td>
+<td>Annual risk-free rate for Sharpe calculation</td>
 </tr>
 </tbody>
 </table>
 <hr>
 </section>
-<section id="performance-summary" class="level2">
-<h2 class="anchored" data-anchor-id="performance-summary">Performance Summary</h2>
+<section id="assumptions-replication-notes" class="level2">
+<h2 class="anchored" data-anchor-id="assumptions-replication-notes">Assumptions &amp; Replication Notes</h2>
+<div class="assumption-box">
+<p><strong>Data source:</strong> IBKR Trader Workstation via ShinyBroker. Regular Trading Hours only (RTH=True). Daily OHLCV bars. 2-year history fetched from April 2024 to April 2026 — 501 trading days.</p>
+<p><strong>Entry execution:</strong> Signals are generated at the close of day T. The position is entered at the open of day T+1. This is conservative and realistic — no same-bar entry.</p>
+<p><strong>Stop-loss execution:</strong> The stop is treated as a hard intraday level. If the day’s low (for longs) or high (for shorts) crosses the stop price, the trade exits at the stop price on that day.</p>
+<p><strong>Commissions &amp; slippage:</strong> Not modelled. At 75 shares of QQQ (a highly liquid ETF with sub-cent spreads), the impact on a strategy holding positions for 12+ days on average is negligible relative to the trade P&amp;L magnitudes observed.</p>
+<p><strong>Look-ahead bias prevention:</strong> All indicator lookbacks use <code>.shift(1)</code> — today’s bar is never used in calculating today’s signal. The backtest loop is strictly sequential, processing one day at a time.</p>
+<p><strong>Walk-forward approach:</strong> The backtest rolls forward through time day by day. Each signal is generated using only data available up to and including the prior trading day. There is no training/test split optimization applied — N=20 is fixed based on the classic Turtle Trading parameter, keeping the strategy honest and avoiding curve-fitting to this specific dataset.</p>
+</div>
+<hr>
+</section>
+<section id="performance-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="performance-metrics">Performance Metrics</h2>
 <div class="metric-grid">
   <div class="metric-box">
     <div class="value">-4.73%</div>
     <div class="label">Total Return</div>
+    <div class="explanation">Simple return on the $100,000 starting capital over the full backtest period.</div>
   </div>
   <div class="metric-box">
     <div class="value">-2.84%</div>
     <div class="label">Annual GMRR</div>
+    <div class="explanation">Geometric Mean Rate of Return annualised. Compounds daily log returns to give a true annualised growth rate.</div>
   </div>
   <div class="metric-box">
     <div class="value">-1.23</div>
-    <div class="label">Sharpe Ratio (rf 3.75%)</div>
+    <div class="label">Sharpe Ratio (rf = 3.75%)</div>
+    <div class="explanation">Excess return above the risk-free rate per unit of volatility. Below zero means the strategy did not compensate for its risk.</div>
   </div>
+</div>
+<div class="metric-grid-2">
   <div class="metric-box">
     <div class="value">37.5%</div>
     <div class="label">Win Rate</div>
+    <div class="explanation">3 of 8 trades closed profitably. Consistent with classic Turtle Trading — the system is designed to win rarely but win large.</div>
+  </div>
+  <div class="metric-box">
+    <div class="value">-$492</div>
+    <div class="label">Avg Return Per Trade</div>
+    <div class="explanation">Average dollar P&amp;L across all 8 completed trades. Negative because losing trades (-$1,739 avg) exceeded winning trades (+$1,253 avg).</div>
   </div>
   <div class="metric-box">
     <div class="value">-6.28%</div>
     <div class="label">Max Drawdown</div>
+    <div class="explanation">Largest peak-to-trough decline in NAV. Reflects the strategy's worst losing streak — capital stayed mostly protected.</div>
   </div>
 </div>
+<p><strong>Additional metrics:</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Profit Factor</td>
+<td>0.39</td>
+</tr>
+<tr class="even">
+<td>Avg Winning Trade</td>
+<td>+$1,253</td>
+</tr>
+<tr class="odd">
+<td>Avg Losing Trade</td>
+<td>-$1,739</td>
+</tr>
+<tr class="even">
+<td>Avg Days Held</td>
+<td>12.5</td>
+</tr>
+<tr class="odd">
+<td>Annual Volatility</td>
+<td>5.33%</td>
+</tr>
+<tr class="even">
+<td>Backtest Period</td>
+<td>Aug 2024 – Apr 2026</td>
+</tr>
+<tr class="odd">
+<td>Total Trades</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
 <hr>
 </section>
 <section id="equity-curve" class="level2">
@@ -322,14 +429,18 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="trade-outcome-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="trade-outcome-analysis">Trade Outcome Analysis</h2>
-<p><span class="outcome-badge badge-success">Success</span> Closed profitably <span class="outcome-badge badge-stop">Stop-loss</span> ATR stop triggered <span class="outcome-badge badge-timeout">Timeout</span> 20-day limit reached</p>
-<iframe src="charts/chart_outcomes.html" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+<p>Every trade is classified into one of three outcomes. The timeout period is <strong>20 trading days</strong>. The stop-loss is set at <strong>3 × ATR(14)</strong> below entry for longs and above entry for shorts.</p>
+<p><span class="outcome-badge badge-success">Success</span> Trade closed profitably — either via timeout or Donchian exit in profit <span class="outcome-badge badge-stop">Stop-loss</span> 3×ATR stop triggered before a profitable exit could occur <span class="outcome-badge badge-timeout">Timeout</span> 20-day holding limit reached, position exited at market close</p>
+<iframe src="charts/chart_outcomes.html" width="100%" height="420" frameborder="0" scrolling="no"></iframe>
+<p>Of the 8 trades: <strong>4 were stopped out</strong>, <strong>3 were successful timeouts</strong>, and <strong>1 was an unsuccessful timeout</strong>. Notably, every profitable trade was a timeout — the Donchian exit signal never triggered on a winning trade. This suggests the 20-day channel exit is too slow to capture gains before mean-reversion occurs.</p>
 <hr>
 </section>
 <section id="trade-blotter" class="level2">
 <h2 class="anchored" data-anchor-id="trade-blotter">Trade Blotter</h2>
+<p>Complete record of all trades. Entry and exit timestamps, prices, position size, direction, and outcome are included.</p>
 <p>
-  <a href="blotter_qqq_breakout.csv" style="background:#00d4ff;color:black;padding:8px 16px;border-radius:4px;text-decoration:none;font-weight:600;">
+  <a href="blotter_qqq_breakout.csv" style="background:#00d4ff;color:black;padding:8px 16px;border-radius:4px;
+            text-decoration:none;font-weight:600;">
     Download Blotter CSV
   </a>
 </p>
@@ -338,61 +449,45 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="market-comparison" class="level2">
 <h2 class="anchored" data-anchor-id="market-comparison">Market Comparison</h2>
-<section id="strategy-vs-qqq" class="level3">
-<h3 class="anchored" data-anchor-id="strategy-vs-qqq">Strategy vs QQQ</h3>
-<iframe src="charts/chart_vs_qqq.html" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+<section id="strategy-vs-qqq-per-trade-log-returns" class="level3">
+<h3 class="anchored" data-anchor-id="strategy-vs-qqq-per-trade-log-returns">Strategy vs QQQ (per-trade log returns)</h3>
+<p>Each point represents one trade. The x-axis is the strategy’s log return on that trade; the y-axis is QQQ’s own log return over the same holding period. A flat or near-zero regression slope indicates the strategy’s returns are not explained by QQQ’s direction — expected for a long/short system.</p>
+<iframe src="charts/chart_vs_qqq.html" width="100%" height="420" frameborder="0" scrolling="no"></iframe>
 </section>
-<section id="strategy-vs-spy" class="level3">
-<h3 class="anchored" data-anchor-id="strategy-vs-spy">Strategy vs SPY</h3>
-<iframe src="charts/chart_vs_spy.html" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+<section id="strategy-vs-spy-per-trade-log-returns" class="level3">
+<h3 class="anchored" data-anchor-id="strategy-vs-spy-per-trade-log-returns">Strategy vs SPY (per-trade log returns)</h3>
+<iframe src="charts/chart_vs_spy.html" width="100%" height="420" frameborder="0" scrolling="no"></iframe>
 <hr>
 </section>
-</section>
-<section id="summary-table" class="level2">
-<h2 class="anchored" data-anchor-id="summary-table">Summary Table</h2>
-<iframe src="charts/chart_walkforward.html" width="100%" height="320" frameborder="0" scrolling="no"></iframe>
-<hr>
 </section>
 <section id="analysis-commentary" class="level2">
 <h2 class="anchored" data-anchor-id="analysis-commentary">Analysis &amp; Commentary</h2>
 <section id="did-the-strategy-work" class="level3">
 <h3 class="anchored" data-anchor-id="did-the-strategy-work">Did the strategy work?</h3>
-<p>Measured purely by return, no. The strategy lost 4.73% over the backtest period while QQQ itself appreciated significantly. However the loss was small in absolute terms and the maximum drawdown of 6.28% reflects a strategy that mostly sat in cash rather than taking large directional bets. Annual volatility of 5.33% is well below QQQ’s own volatility, meaning the strategy was capital-preserving even when unprofitable.</p>
+<p>No — the strategy lost 4.73% over the backtest period while QQQ itself appreciated significantly. However the absolute dollar loss was modest ($4,730 on $100,000) and the maximum drawdown of 6.28% indicates that capital was largely preserved. The strategy spent most of the period in cash, which limited both upside participation and downside risk.</p>
 </section>
 <section id="why-did-the-losing-trades-lose" class="level3">
 <h3 class="anchored" data-anchor-id="why-did-the-losing-trades-lose">Why did the losing trades lose?</h3>
-<p>All four losing trades were stopped out within 2 to 15 days. The structural problem is that the strategy enters the morning after the breakout signal, by which point the explosive move has already occurred. What follows is often a short-term mean-reversion as traders take profits, which hits the stop before the real trend develops. The two largest losses — August 2024 and April 2025 — occurred during sudden volatility spikes (the yen carry unwind and the tariff shock). Both triggered breakout signals that immediately reversed as markets stabilized.</p>
+<p>All four losing trades were stopped out within 2 to 15 days. The structural problem is that entry occurs the morning after the breakout signal, by which point the initial explosive move has already occurred. What follows is often a short-term mean-reversion as traders take profits off the breakout, which hits the stop before the real trend has a chance to develop. The two largest losses — August 2024 and April 2025 — both occurred during sudden volatility spikes driven by macro events (the yen carry trade unwind and the tariff shock respectively). In both cases QQQ made a sharp directional move that generated a signal, then immediately reversed as the event stabilized. These are regime-change episodes where trend-following signals produce false positives.</p>
 </section>
 <section id="why-did-the-winning-trades-win" class="level3">
 <h3 class="anchored" data-anchor-id="why-did-the-winning-trades-win">Why did the winning trades win?</h3>
-<p>All three profitable trades were held for the full 20-day timeout. The strategy never found a clean Donchian exit — it simply held long enough for the position to accumulate gains. The edge, when it exists, comes from patience rather than a precise exit mechanism.</p>
+<p>All three profitable trades were held for the full 20-day timeout. The strategy never found a clean Donchian exit on a winner — it simply held long enough for the trend to accumulate gains. The implication is that the edge, when it exists, comes from patience and position-holding rather than a precise exit mechanism.</p>
 </section>
-<section id="what-does-the-alphabeta-analysis-show" class="level3">
-<h3 class="anchored" data-anchor-id="what-does-the-alphabeta-analysis-show">What does the alpha/beta analysis show?</h3>
-<p>Near-zero beta vs both QQQ and SPY confirms that strategy returns are not driven by general market direction. This is expected for a long/short system where longs and shorts partially offset each other’s market exposure. Near-zero alpha means no excess returns are being generated either — performance is driven purely by the mechanical entry/exit structure.</p>
+<section id="what-does-the-alphabeta-comparison-show" class="level3">
+<h3 class="anchored" data-anchor-id="what-does-the-alphabeta-comparison-show">What does the alpha/beta comparison show?</h3>
+<p>Near-zero beta versus both QQQ and SPY confirms that the strategy’s returns are structurally independent of general market direction. This is expected for a long/short system where longs and shorts partially offset each other’s market exposure. Near-zero alpha means no excess returns are being generated above what the mechanical rules produce. The strategy is not benefiting from luck or market direction — its performance, positive or negative, is entirely a function of its own rules.</p>
 </section>
-<section id="why-is-donchian-breakout-harder-on-equities-than-commodities" class="level3">
-<h3 class="anchored" data-anchor-id="why-is-donchian-breakout-harder-on-equities-than-commodities">Why is Donchian breakout harder on equities than commodities?</h3>
-<p>The original Turtle system was designed for commodity futures — crude oil, gold, currencies. These trend more persistently because supply/demand imbalances take months to resolve. Equity indices like QQQ mean-revert on short timescales because earnings, valuations, and institutional rebalancing constantly pull prices toward fair value. The 2024-2026 QQQ regime — sharp policy-driven spikes followed by fast recoveries — was particularly hostile to trend-following.</p>
+<section id="why-is-breakout-trading-harder-on-equities-than-commodities" class="level3">
+<h3 class="anchored" data-anchor-id="why-is-breakout-trading-harder-on-equities-than-commodities">Why is breakout trading harder on equities than commodities?</h3>
+<p>The original Turtle Trading system was designed for commodity futures — crude oil, gold, currencies. These markets trend more persistently because supply and demand imbalances take months or years to resolve. Equity indices like QQQ mean-revert on short timescales because earnings, valuations, and institutional rebalancing constantly pull prices toward fundamental value. The Choppiness Index filter removes many of these false signals, but the 2024-2026 QQQ regime — characterized by sharp policy-driven spikes followed by rapid recoveries — was particularly hostile to trend-following logic. The market moved in ways that looked like breakouts but resolved within days rather than weeks.</p>
 </section>
 <section id="how-would-you-improve-the-model" class="level3">
 <h3 class="anchored" data-anchor-id="how-would-you-improve-the-model">How would you improve the model?</h3>
-<p>The most promising improvement would be a volatility regime filter: skip all signals when realized volatility over the past 5 days is more than 2 standard deviations above its 60-day mean. This is observable before entry and would have excluded the two largest losing trades without any look-ahead bias. A second improvement would be entry refinement — waiting for a small intraday pullback toward the breakout level rather than entering at next-day open, improving average entry price and widening effective stop distance.</p>
-<hr>
-</section>
-</section>
-<section id="assumptions-reproducibility" class="level2">
-<h2 class="anchored" data-anchor-id="assumptions-reproducibility">Assumptions &amp; Reproducibility</h2>
-<ul>
-<li>All data from IBKR TWS via ShinyBroker, Regular Trading Hours only</li>
-<li>Entry at next-day open after signal bar closes</li>
-<li>Stop triggered at intraday low/high crossing stop level</li>
-<li>No commissions or slippage modelled</li>
-<li>All indicators use .shift(1) on lookback windows, no look-ahead bias</li>
-<li>Data period: April 2024 to April 2026, 501 trading days</li>
-</ul>
+<p>The most promising improvement would be a <strong>volatility regime filter</strong>: skip all signals when realized volatility over the past 5 days is more than 2 standard deviations above its 60-day mean. This targets exactly the spike-and-reverse environment that produced the two largest losses, using only information observable before entry — no look-ahead bias. A second improvement would be <strong>entry refinement</strong>: rather than entering at next-day open, wait for an intraday pullback of 0.5×ATR back toward the breakout level before entering. This reduces the risk of chasing an exhausted move and directly widens the effective stop distance without changing the stop placement logic.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
