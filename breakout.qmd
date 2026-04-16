@@ -1,0 +1,231 @@
+---
+title: "Breakout Strategy — QQQ"
+subtitle: "Turtle Trading with Choppiness Index & Volume Filters"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    theme: darkly
+---
+
+```{=html}
+<style>
+  h1, h2, h3 { color: #00d4ff; }
+  .filter-card {
+    background: #111127;
+    border-left: 4px solid #00d4ff;
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .filter-card h4 { color: #00d97e; margin: 0 0 0.4rem 0; }
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .metric-box {
+    background: #1a1a2e;
+    border: 1px solid #00d4ff44;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .metric-box .value { font-size: 1.6rem; font-weight: 700; color: #00d4ff; }
+  .metric-box .label { font-size: 0.8rem; color: #888; margin-top: 4px; }
+  .outcome-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .badge-success  { background:#00d97e22; color:#00d97e; border:1px solid #00d97e; }
+  .badge-stop     { background:#ff444422; color:#ff4444; border:1px solid #ff4444; }
+  .badge-timeout  { background:#f0a50022; color:#f0a500; border:1px solid #f0a500; }
+</style>
+```
+
+## Strategy Overview
+
+This page documents a systematic long/short breakout strategy applied to **QQQ (Invesco Nasdaq-100 ETF)**, built on the foundation of the legendary **Turtle Trading System** developed by Richard Dennis in the 1980s, and enhanced with two modern filters to reduce whipsaw losses.
+
+---
+
+## Strategy Logic
+
+The strategy identifies moments when QQQ's price decisively breaks out of a multi-week trading range and enters a position to ride the emerging trend.
+
+**Entry signal:** A Donchian Channel breakout. A close above the highest high of the previous 20 bars triggers a long entry the next morning at the open. A close below the lowest low triggers a short entry. All lookbacks use `.shift(1)` so today's bar never influences its own signal.
+
+**Two filters gate every signal:**
+
+:::{.filter-card}
+#### Filter 1 · Choppiness Index < 65
+Developed by E.W. Dreiss using fractal geometry, this indicator measures whether price is behaving like a directional trend (low values) or random noise (high values). Above 65 means choppy regime — all signals skipped.
+:::
+
+:::{.filter-card}
+#### Filter 2 · Volume > 1.0x 20-Day Average
+A breakout on below-average volume has no institutional participation behind it. Volume must exceed its 20-day average before any signal is acted on.
+:::
+
+**Exit rules in priority order:** Stop-loss at 3xATR(14), Donchian exit when close crosses opposite 20-day channel, Timeout after 20 trading days at market close.
+
+---
+
+## Asset Selection
+
+QQQ was chosen for its extreme liquidity, strong trend-following characteristics during sustained moves, and tradability in both directions — experiencing genuine downtrends in 2022 and early 2025 as well as strong uptrends.
+
+---
+
+## Breakout Definition
+
+| Parameter | Value |
+|-----------|-------|
+| Entry channel | 20-day Donchian |
+| Exit channel | 20-day Donchian (opposite side) |
+| Stop-loss | 3 x ATR(14) |
+| Timeout | 20 trading days |
+| Choppiness threshold | 65.0 |
+| Volume filter | 1.0x 20-day average |
+| Position size | 75 shares |
+| Starting capital | $100,000 |
+| Risk-free rate (Sharpe) | 3.75% |
+
+---
+
+## Performance Summary
+
+```{=html}
+<div class="metric-grid">
+  <div class="metric-box">
+    <div class="value">-4.73%</div>
+    <div class="label">Total Return</div>
+  </div>
+  <div class="metric-box">
+    <div class="value">-2.84%</div>
+    <div class="label">Annual GMRR</div>
+  </div>
+  <div class="metric-box">
+    <div class="value">-1.23</div>
+    <div class="label">Sharpe Ratio (rf 3.75%)</div>
+  </div>
+  <div class="metric-box">
+    <div class="value">37.5%</div>
+    <div class="label">Win Rate</div>
+  </div>
+  <div class="metric-box">
+    <div class="value">-6.28%</div>
+    <div class="label">Max Drawdown</div>
+  </div>
+</div>
+```
+
+---
+
+## Equity Curve
+
+```{=html}
+<iframe src="charts/chart_nav.html" width="100%" height="420" frameborder="0" scrolling="no"></iframe>
+```
+
+---
+
+## Drawdown
+
+```{=html}
+<iframe src="charts/chart_drawdown.html" width="100%" height="300" frameborder="0" scrolling="no"></iframe>
+```
+
+---
+
+## Trade Outcome Analysis
+
+<span class="outcome-badge badge-success">Success</span> Closed profitably
+<span class="outcome-badge badge-stop">Stop-loss</span> ATR stop triggered
+<span class="outcome-badge badge-timeout">Timeout</span> 20-day limit reached
+
+```{=html}
+<iframe src="charts/chart_outcomes.html" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+```
+
+---
+
+## Trade Blotter
+
+```{=html}
+<p>
+  <a href="blotter_qqq_breakout.csv"
+     style="background:#00d4ff;color:black;padding:8px 16px;border-radius:4px;text-decoration:none;font-weight:600;">
+    Download Blotter CSV
+  </a>
+</p>
+<iframe src="charts/chart_blotter.html" width="100%" height="380" frameborder="0" scrolling="no"></iframe>
+```
+
+---
+
+## Market Comparison
+
+### Strategy vs QQQ
+
+```{=html}
+<iframe src="charts/chart_vs_qqq.html" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+```
+
+### Strategy vs SPY
+
+```{=html}
+<iframe src="charts/chart_vs_spy.html" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+```
+
+---
+
+## Summary Table
+
+```{=html}
+<iframe src="charts/chart_walkforward.html" width="100%" height="320" frameborder="0" scrolling="no"></iframe>
+```
+
+---
+
+## Analysis & Commentary
+
+### Did the strategy work?
+
+Measured purely by return, no. The strategy lost 4.73% over the backtest period while QQQ itself appreciated significantly. However the loss was small in absolute terms and the maximum drawdown of 6.28% reflects a strategy that mostly sat in cash rather than taking large directional bets. Annual volatility of 5.33% is well below QQQ's own volatility, meaning the strategy was capital-preserving even when unprofitable.
+
+### Why did the losing trades lose?
+
+All four losing trades were stopped out within 2 to 15 days. The structural problem is that the strategy enters the morning after the breakout signal, by which point the explosive move has already occurred. What follows is often a short-term mean-reversion as traders take profits, which hits the stop before the real trend develops. The two largest losses — August 2024 and April 2025 — occurred during sudden volatility spikes (the yen carry unwind and the tariff shock). Both triggered breakout signals that immediately reversed as markets stabilized.
+
+### Why did the winning trades win?
+
+All three profitable trades were held for the full 20-day timeout. The strategy never found a clean Donchian exit — it simply held long enough for the position to accumulate gains. The edge, when it exists, comes from patience rather than a precise exit mechanism.
+
+### What does the alpha/beta analysis show?
+
+Near-zero beta vs both QQQ and SPY confirms that strategy returns are not driven by general market direction. This is expected for a long/short system where longs and shorts partially offset each other's market exposure. Near-zero alpha means no excess returns are being generated either — performance is driven purely by the mechanical entry/exit structure.
+
+### Why is Donchian breakout harder on equities than commodities?
+
+The original Turtle system was designed for commodity futures — crude oil, gold, currencies. These trend more persistently because supply/demand imbalances take months to resolve. Equity indices like QQQ mean-revert on short timescales because earnings, valuations, and institutional rebalancing constantly pull prices toward fair value. The 2024-2026 QQQ regime — sharp policy-driven spikes followed by fast recoveries — was particularly hostile to trend-following.
+
+### How would you improve the model?
+
+The most promising improvement would be a volatility regime filter: skip all signals when realized volatility over the past 5 days is more than 2 standard deviations above its 60-day mean. This is observable before entry and would have excluded the two largest losing trades without any look-ahead bias. A second improvement would be entry refinement — waiting for a small intraday pullback toward the breakout level rather than entering at next-day open, improving average entry price and widening effective stop distance.
+
+---
+
+## Assumptions & Reproducibility
+
+- All data from IBKR TWS via ShinyBroker, Regular Trading Hours only
+- Entry at next-day open after signal bar closes
+- Stop triggered at intraday low/high crossing stop level
+- No commissions or slippage modelled
+- All indicators use .shift(1) on lookback windows, no look-ahead bias
+- Data period: April 2024 to April 2026, 501 trading days

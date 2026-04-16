@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Breakout Strategy — QQQ – Fintech533_Pinya713</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-13c54d146090675174dcd0c43ad7278d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Fintech533_Pinya713</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#strategy-overview" id="toc-strategy-overview" class="nav-link active" data-scroll-target="#strategy-overview">Strategy Overview</a></li>
+  <li><a href="#strategy-logic" id="toc-strategy-logic" class="nav-link" data-scroll-target="#strategy-logic">Strategy Logic</a></li>
+  <li><a href="#asset-selection" id="toc-asset-selection" class="nav-link" data-scroll-target="#asset-selection">Asset Selection</a></li>
+  <li><a href="#breakout-definition" id="toc-breakout-definition" class="nav-link" data-scroll-target="#breakout-definition">Breakout Definition</a></li>
+  <li><a href="#performance-summary" id="toc-performance-summary" class="nav-link" data-scroll-target="#performance-summary">Performance Summary</a></li>
+  <li><a href="#equity-curve" id="toc-equity-curve" class="nav-link" data-scroll-target="#equity-curve">Equity Curve</a></li>
+  <li><a href="#drawdown" id="toc-drawdown" class="nav-link" data-scroll-target="#drawdown">Drawdown</a></li>
+  <li><a href="#trade-outcome-analysis" id="toc-trade-outcome-analysis" class="nav-link" data-scroll-target="#trade-outcome-analysis">Trade Outcome Analysis</a></li>
+  <li><a href="#trade-blotter" id="toc-trade-blotter" class="nav-link" data-scroll-target="#trade-blotter">Trade Blotter</a></li>
+  <li><a href="#market-comparison" id="toc-market-comparison" class="nav-link" data-scroll-target="#market-comparison">Market Comparison</a>
+  <ul class="collapse">
+  <li><a href="#strategy-vs-qqq" id="toc-strategy-vs-qqq" class="nav-link" data-scroll-target="#strategy-vs-qqq">Strategy vs QQQ</a></li>
+  <li><a href="#strategy-vs-spy" id="toc-strategy-vs-spy" class="nav-link" data-scroll-target="#strategy-vs-spy">Strategy vs SPY</a></li>
+  </ul></li>
+  <li><a href="#summary-table" id="toc-summary-table" class="nav-link" data-scroll-target="#summary-table">Summary Table</a></li>
+  <li><a href="#analysis-commentary" id="toc-analysis-commentary" class="nav-link" data-scroll-target="#analysis-commentary">Analysis &amp; Commentary</a>
+  <ul class="collapse">
+  <li><a href="#did-the-strategy-work" id="toc-did-the-strategy-work" class="nav-link" data-scroll-target="#did-the-strategy-work">Did the strategy work?</a></li>
+  <li><a href="#why-did-the-losing-trades-lose" id="toc-why-did-the-losing-trades-lose" class="nav-link" data-scroll-target="#why-did-the-losing-trades-lose">Why did the losing trades lose?</a></li>
+  <li><a href="#why-did-the-winning-trades-win" id="toc-why-did-the-winning-trades-win" class="nav-link" data-scroll-target="#why-did-the-winning-trades-win">Why did the winning trades win?</a></li>
+  <li><a href="#what-does-the-alphabeta-analysis-show" id="toc-what-does-the-alphabeta-analysis-show" class="nav-link" data-scroll-target="#what-does-the-alphabeta-analysis-show">What does the alpha/beta analysis show?</a></li>
+  <li><a href="#why-is-donchian-breakout-harder-on-equities-than-commodities" id="toc-why-is-donchian-breakout-harder-on-equities-than-commodities" class="nav-link" data-scroll-target="#why-is-donchian-breakout-harder-on-equities-than-commodities">Why is Donchian breakout harder on equities than commodities?</a></li>
+  <li><a href="#how-would-you-improve-the-model" id="toc-how-would-you-improve-the-model" class="nav-link" data-scroll-target="#how-would-you-improve-the-model">How would you improve the model?</a></li>
+  </ul></li>
+  <li><a href="#assumptions-reproducibility" id="toc-assumptions-reproducibility" class="nav-link" data-scroll-target="#assumptions-reproducibility">Assumptions &amp; Reproducibility</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Breakout Strategy — QQQ</h1>
+<p class="subtitle lead">Turtle Trading with Choppiness Index &amp; Volume Filters</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<style>
+  h1, h2, h3 { color: #00d4ff; }
+  .filter-card {
+    background: #111127;
+    border-left: 4px solid #00d4ff;
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .filter-card h4 { color: #00d97e; margin: 0 0 0.4rem 0; }
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .metric-box {
+    background: #1a1a2e;
+    border: 1px solid #00d4ff44;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .metric-box .value { font-size: 1.6rem; font-weight: 700; color: #00d4ff; }
+  .metric-box .label { font-size: 0.8rem; color: #888; margin-top: 4px; }
+  .outcome-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .badge-success  { background:#00d97e22; color:#00d97e; border:1px solid #00d97e; }
+  .badge-stop     { background:#ff444422; color:#ff4444; border:1px solid #ff4444; }
+  .badge-timeout  { background:#f0a50022; color:#f0a500; border:1px solid #f0a500; }
+</style>
+<section id="strategy-overview" class="level2">
+<h2 class="anchored" data-anchor-id="strategy-overview">Strategy Overview</h2>
+<p>This page documents a systematic long/short breakout strategy applied to <strong>QQQ (Invesco Nasdaq-100 ETF)</strong>, built on the foundation of the legendary <strong>Turtle Trading System</strong> developed by Richard Dennis in the 1980s, and enhanced with two modern filters to reduce whipsaw losses.</p>
+<hr>
+</section>
+<section id="strategy-logic" class="level2">
+<h2 class="anchored" data-anchor-id="strategy-logic">Strategy Logic</h2>
+<p>The strategy identifies moments when QQQ’s price decisively breaks out of a multi-week trading range and enters a position to ride the emerging trend.</p>
+<p><strong>Entry signal:</strong> A Donchian Channel breakout. A close above the highest high of the previous 20 bars triggers a long entry the next morning at the open. A close below the lowest low triggers a short entry. All lookbacks use <code>.shift(1)</code> so today’s bar never influences its own signal.</p>
+<p><strong>Two filters gate every signal:</strong></p>
+<section id="filter-1-choppiness-index-65" class="level4 filter-card">
+<h4 class="anchored" data-anchor-id="filter-1-choppiness-index-65">Filter 1 · Choppiness Index &lt; 65</h4>
+<p>Developed by E.W. Dreiss using fractal geometry, this indicator measures whether price is behaving like a directional trend (low values) or random noise (high values). Above 65 means choppy regime — all signals skipped.</p>
+</section>
+<section id="filter-2-volume-1.0x-20-day-average" class="level4 filter-card">
+<h4 class="anchored" data-anchor-id="filter-2-volume-1.0x-20-day-average">Filter 2 · Volume &gt; 1.0x 20-Day Average</h4>
+<p>A breakout on below-average volume has no institutional participation behind it. Volume must exceed its 20-day average before any signal is acted on.</p>
+</section>
+<p><strong>Exit rules in priority order:</strong> Stop-loss at 3xATR(14), Donchian exit when close crosses opposite 20-day channel, Timeout after 20 trading days at market close.</p>
+<hr>
+</section>
+<section id="asset-selection" class="level2">
+<h2 class="anchored" data-anchor-id="asset-selection">Asset Selection</h2>
+<p>QQQ was chosen for its extreme liquidity, strong trend-following characteristics during sustained moves, and tradability in both directions — experiencing genuine downtrends in 2022 and early 2025 as well as strong uptrends.</p>
+<hr>
+</section>
+<section id="breakout-definition" class="level2">
+<h2 class="anchored" data-anchor-id="breakout-definition">Breakout Definition</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Entry channel</td>
+<td>20-day Donchian</td>
+</tr>
+<tr class="even">
+<td>Exit channel</td>
+<td>20-day Donchian (opposite side)</td>
+</tr>
+<tr class="odd">
+<td>Stop-loss</td>
+<td>3 x ATR(14)</td>
+</tr>
+<tr class="even">
+<td>Timeout</td>
+<td>20 trading days</td>
+</tr>
+<tr class="odd">
+<td>Choppiness threshold</td>
+<td>65.0</td>
+</tr>
+<tr class="even">
+<td>Volume filter</td>
+<td>1.0x 20-day average</td>
+</tr>
+<tr class="odd">
+<td>Position size</td>
+<td>75 shares</td>
+</tr>
+<tr class="even">
+<td>Starting capital</td>
+<td>$100,000</td>
+</tr>
+<tr class="odd">
+<td>Risk-free rate (Sharpe)</td>
+<td>3.75%</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="performance-summary" class="level2">
+<h2 class="anchored" data-anchor-id="performance-summary">Performance Summary</h2>
+<div class="metric-grid">
+  <div class="metric-box">
+    <div class="value">-4.73%</div>
+    <div class="label">Total Return</div>
+  </div>
+  <div class="metric-box">
+    <div class="value">-2.84%</div>
+    <div class="label">Annual GMRR</div>
+  </div>
+  <div class="metric-box">
+    <div class="value">-1.23</div>
+    <div class="label">Sharpe Ratio (rf 3.75%)</div>
+  </div>
+  <div class="metric-box">
+    <div class="value">37.5%</div>
+    <div class="label">Win Rate</div>
+  </div>
+  <div class="metric-box">
+    <div class="value">-6.28%</div>
+    <div class="label">Max Drawdown</div>
+  </div>
+</div>
+<hr>
+</section>
+<section id="equity-curve" class="level2">
+<h2 class="anchored" data-anchor-id="equity-curve">Equity Curve</h2>
+<iframe src="charts/chart_nav.html" width="100%" height="420" frameborder="0" scrolling="no"></iframe>
+<hr>
+</section>
+<section id="drawdown" class="level2">
+<h2 class="anchored" data-anchor-id="drawdown">Drawdown</h2>
+<iframe src="charts/chart_drawdown.html" width="100%" height="300" frameborder="0" scrolling="no"></iframe>
+<hr>
+</section>
+<section id="trade-outcome-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="trade-outcome-analysis">Trade Outcome Analysis</h2>
+<p><span class="outcome-badge badge-success">Success</span> Closed profitably <span class="outcome-badge badge-stop">Stop-loss</span> ATR stop triggered <span class="outcome-badge badge-timeout">Timeout</span> 20-day limit reached</p>
+<iframe src="charts/chart_outcomes.html" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+<hr>
+</section>
+<section id="trade-blotter" class="level2">
+<h2 class="anchored" data-anchor-id="trade-blotter">Trade Blotter</h2>
+<p>
+  <a href="blotter_qqq_breakout.csv" style="background:#00d4ff;color:black;padding:8px 16px;border-radius:4px;text-decoration:none;font-weight:600;">
+    Download Blotter CSV
+  </a>
+</p>
+<iframe src="charts/chart_blotter.html" width="100%" height="380" frameborder="0" scrolling="no"></iframe>
+<hr>
+</section>
+<section id="market-comparison" class="level2">
+<h2 class="anchored" data-anchor-id="market-comparison">Market Comparison</h2>
+<section id="strategy-vs-qqq" class="level3">
+<h3 class="anchored" data-anchor-id="strategy-vs-qqq">Strategy vs QQQ</h3>
+<iframe src="charts/chart_vs_qqq.html" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+</section>
+<section id="strategy-vs-spy" class="level3">
+<h3 class="anchored" data-anchor-id="strategy-vs-spy">Strategy vs SPY</h3>
+<iframe src="charts/chart_vs_spy.html" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+<hr>
+</section>
+</section>
+<section id="summary-table" class="level2">
+<h2 class="anchored" data-anchor-id="summary-table">Summary Table</h2>
+<iframe src="charts/chart_walkforward.html" width="100%" height="320" frameborder="0" scrolling="no"></iframe>
+<hr>
+</section>
+<section id="analysis-commentary" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-commentary">Analysis &amp; Commentary</h2>
+<section id="did-the-strategy-work" class="level3">
+<h3 class="anchored" data-anchor-id="did-the-strategy-work">Did the strategy work?</h3>
+<p>Measured purely by return, no. The strategy lost 4.73% over the backtest period while QQQ itself appreciated significantly. However the loss was small in absolute terms and the maximum drawdown of 6.28% reflects a strategy that mostly sat in cash rather than taking large directional bets. Annual volatility of 5.33% is well below QQQ’s own volatility, meaning the strategy was capital-preserving even when unprofitable.</p>
+</section>
+<section id="why-did-the-losing-trades-lose" class="level3">
+<h3 class="anchored" data-anchor-id="why-did-the-losing-trades-lose">Why did the losing trades lose?</h3>
+<p>All four losing trades were stopped out within 2 to 15 days. The structural problem is that the strategy enters the morning after the breakout signal, by which point the explosive move has already occurred. What follows is often a short-term mean-reversion as traders take profits, which hits the stop before the real trend develops. The two largest losses — August 2024 and April 2025 — occurred during sudden volatility spikes (the yen carry unwind and the tariff shock). Both triggered breakout signals that immediately reversed as markets stabilized.</p>
+</section>
+<section id="why-did-the-winning-trades-win" class="level3">
+<h3 class="anchored" data-anchor-id="why-did-the-winning-trades-win">Why did the winning trades win?</h3>
+<p>All three profitable trades were held for the full 20-day timeout. The strategy never found a clean Donchian exit — it simply held long enough for the position to accumulate gains. The edge, when it exists, comes from patience rather than a precise exit mechanism.</p>
+</section>
+<section id="what-does-the-alphabeta-analysis-show" class="level3">
+<h3 class="anchored" data-anchor-id="what-does-the-alphabeta-analysis-show">What does the alpha/beta analysis show?</h3>
+<p>Near-zero beta vs both QQQ and SPY confirms that strategy returns are not driven by general market direction. This is expected for a long/short system where longs and shorts partially offset each other’s market exposure. Near-zero alpha means no excess returns are being generated either — performance is driven purely by the mechanical entry/exit structure.</p>
+</section>
+<section id="why-is-donchian-breakout-harder-on-equities-than-commodities" class="level3">
+<h3 class="anchored" data-anchor-id="why-is-donchian-breakout-harder-on-equities-than-commodities">Why is Donchian breakout harder on equities than commodities?</h3>
+<p>The original Turtle system was designed for commodity futures — crude oil, gold, currencies. These trend more persistently because supply/demand imbalances take months to resolve. Equity indices like QQQ mean-revert on short timescales because earnings, valuations, and institutional rebalancing constantly pull prices toward fair value. The 2024-2026 QQQ regime — sharp policy-driven spikes followed by fast recoveries — was particularly hostile to trend-following.</p>
+</section>
+<section id="how-would-you-improve-the-model" class="level3">
+<h3 class="anchored" data-anchor-id="how-would-you-improve-the-model">How would you improve the model?</h3>
+<p>The most promising improvement would be a volatility regime filter: skip all signals when realized volatility over the past 5 days is more than 2 standard deviations above its 60-day mean. This is observable before entry and would have excluded the two largest losing trades without any look-ahead bias. A second improvement would be entry refinement — waiting for a small intraday pullback toward the breakout level rather than entering at next-day open, improving average entry price and widening effective stop distance.</p>
+<hr>
+</section>
+</section>
+<section id="assumptions-reproducibility" class="level2">
+<h2 class="anchored" data-anchor-id="assumptions-reproducibility">Assumptions &amp; Reproducibility</h2>
+<ul>
+<li>All data from IBKR TWS via ShinyBroker, Regular Trading Hours only</li>
+<li>Entry at next-day open after signal bar closes</li>
+<li>Stop triggered at intraday low/high crossing stop level</li>
+<li>No commissions or slippage modelled</li>
+<li>All indicators use .shift(1) on lookback windows, no look-ahead bias</li>
+<li>Data period: April 2024 to April 2026, 501 trading days</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

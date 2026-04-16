@@ -4,5 +4,11 @@
   },
   "index.qmd": {
     "index.html": "1b9e3df6"
+  },
+  "breakout.qmd": {
+    "breakout.html": "7212b6b6"
+  },
+  "breakout_strategy_QQQ.ipynb": {
+    "breakout_strategy_QQQ.html": "4e658802"
   }
 }
