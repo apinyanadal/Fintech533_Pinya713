@@ -68,11 +68,13 @@ format:
 ## Strategy Logic
 
 The Turtle Strategy used for this project is a long/short trend-following system that follows the framework of Donchain Channel. We are doing the following: if the market reaches a multi-week high or low this indicates a new potential start of a directional trend. The strategy takes a long position of 75 shares if we are at a 2 week high, and a 75 share short position when at a 2 week low. Before entering the trade however, we need to ensure we aren't entering a false breakout, 2 main filters need to be satisfied simultaneously. Firstly, the Choppiness index needs to confirm that we aren't in a choppy environment, that we are actually in a trending market. Secondly, volume needs to be above its 20 day average to confirm that there is actually participation behind this movement. Once we have entered the trades, positions are managed with a stop loss of 3x the Average True range from entry and also a Donchain based exit when price reverses through the opposite channel boundary. Lastly there is also a hard time out of 20 days as the Max holding period. We are using a rolling window, and features with no look ahead bias.
+
 ---
 
 ## Asset Selection
 
 I chose QQQ (Invesco Nasdaq 100 Etf) for several reasons. Firstly, because it has the highest average daily dollar volume of any US equity etf, this means that we would have less slippage in our entries and exits of 75 shares. Secondly, historically the Nasdaq has shown very strong momentum characteristics, this ideal for the Donchain breakout system. Lastly, QQQ is diversified, this means that no single stock or name event can distort the breakout signals too much. For example, I didn't pick SPY because its lower volatility and and produces smaller and fewer breakouts.
+
 ---
 
 ## Breakout Detection Function
