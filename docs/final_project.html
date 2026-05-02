@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Pau Pinyanadal">
+<meta name="author" content="Alex Pina-Nadal">
 <meta name="dcterms.date" content="2026-05-02">
 
 <title>Cross-Sectional Sector Momentum Rotation Strategy – Fintech533_Pinya713</title>
@@ -198,7 +198,6 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#did-the-strategy-work" id="toc-did-the-strategy-work" class="nav-link" data-scroll-target="#did-the-strategy-work">Did the strategy work?</a></li>
   <li><a href="#why-did-the-short-book-fail" id="toc-why-did-the-short-book-fail" class="nav-link" data-scroll-target="#why-did-the-short-book-fail">Why did the short book fail?</a></li>
-  <li><a href="#the-april-2025-event" id="toc-the-april-2025-event" class="nav-link" data-scroll-target="#the-april-2025-event">The April 2025 event</a></li>
   <li><a href="#how-would-we-improve-the-model" id="toc-how-would-we-improve-the-model" class="nav-link" data-scroll-target="#how-would-we-improve-the-model">How would we improve the model?</a></li>
   </ul></li>
   </ul>
@@ -220,7 +219,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Pau Pinyanadal </p>
+             <p>Alex Pina-Nadal </p>
           </div>
   </div>
     
@@ -241,11 +240,10 @@ window.Quarto = {
 
 <section id="strategy-overview" class="level2">
 <h2 class="anchored" data-anchor-id="strategy-overview">Strategy Overview</h2>
-<p>This project implements a <strong>cross-sectional sector momentum rotation strategy</strong> across the 11 SPDR sector ETFs that make up the S&amp;P 500. The core idea is simple: rank all 11 sectors by their trailing 3-month price return, go long the top 3 strongest sectors, and short the bottom 3 weakest sectors. Rebalance every calendar month.</p>
-<p><strong>Market phenomenon being captured:</strong> Institutional capital rotates slowly and persistently across economic sectors in response to macro cycle shifts. Sectors that have been winning recently tend to continue winning in the near term because institutional flows are slow to adjust — a well-documented effect in academic finance known as cross-sectional momentum (Jegadeesh &amp; Titman, 1993).</p>
-<p><strong>Universe:</strong> XLK, XLF, XLE, XLV, XLI, XLP, XLY, XLU, XLRE, XLB, XLC</p>
-<p><strong>Backtest period:</strong> September 2024 — April 2026 (21 monthly rebalances)</p>
-<p><strong>Data source:</strong> IBKR via ShinyBroker — daily OHLCV bars, 2 years</p>
+<p>In this project we have implemented a cross-sectional sector momentum rotation strategy across 11 different sectors that make up the S&amp;P 500. The main idea is that we rank all 11 sectors by their trailing 3-month price return, we go long on the top 3 sectors, and short the bottom 3 sectors. We do this rebalancing every month.&nbsp;</p>
+<p>This hypothesis comes from (Jegadeesh &amp; Titman, 1993), which captures the following market phenomenon: Institutional capital rotates slowly and persistently across economic sectors in response to macro cycle shifts. Sectors that have been winning recently tend to continue winning in the near term because institutional flows are slow to adjust.&nbsp;</p>
+<p>The 11 sectors in this strategy are: Technology (XLK), Financials (XLF), Energy (XLE), Healthcare (XLV), Industrials (XLI), Consumer Staples (XLP), Consumer Discretionary (XLY), Utilities (XLU), Real Estate (XLRE), Materials (XLB), and Communication Services (XLC).</p>
+<p>I did a 2 year backtest period starting in September 2024 until April 2026 with a total of 21 monthly rebalances, the rolling window is 3 months as mentioned.</p>
 <hr>
 </section>
 <section id="entry-orders" class="level2">
@@ -255,23 +253,23 @@ window.Quarto = {
 <p>On the <strong>first trading day of each calendar month</strong>, the strategy:</p>
 <ol type="1">
 <li>Computes the 3-month trailing momentum for all 11 sector ETFs</li>
-<li>Ranks sectors from strongest (rank 1) to weakest (rank 11)</li>
-<li>Goes <strong>long</strong> the top 3 ranked sectors at the <strong>market open</strong></li>
-<li>Goes <strong>short</strong> the bottom 3 ranked sectors at the <strong>market open</strong></li>
+<li>Ranks all the sectors from strongest (rank 1) to weakest (rank 11)</li>
+<li>Goes <strong>long</strong> on the top 3 ranked sectors at the market open</li>
+<li>Goes <strong>short</strong> on the bottom 3 ranked sectors at the market open</li>
 </ol>
 </section>
 <section id="momentum-signal-formula" class="level3">
 <h3 class="anchored" data-anchor-id="momentum-signal-formula">Momentum Signal Formula</h3>
 <p><span class="math display">\[\text{Momentum}_t = \frac{\text{Close}_{t-1}}{\text{Close}_{t-1-63}} - 1\]</span></p>
-<p>The signal uses <strong>yesterday’s close</strong> (not today’s), ensuring no lookahead bias — the ranking is fully formed before the market opens on the rebalance date.</p>
+<p>The signal uses <strong>yesterday’s close</strong> (not today’s), this is in order to ensure no lookahead bias, the ranking is fully formed before the market opens on the rebalance date.</p>
 </section>
 <section id="parameter-justification" class="level3">
 <h3 class="anchored" data-anchor-id="parameter-justification">Parameter Justification</h3>
 <ul>
-<li><strong>Lookback = 63 trading days (~3 months):</strong> The 3-month momentum window is the most widely validated in academic literature. Shorter windows (1 month) capture noise; longer windows (12 months) lag the economic cycle too much. 63 trading days = 21 trading days/month × 3 months.</li>
+<li><strong>Lookback = 63 trading days (~3 months):</strong> The 3-month momentum window is the most widely validated in academic literature. I also looked into shorter windows like 1 month, but it mainly capture noise,whereas on the other hand longer windows like 12 months lag the economic cycle too much. 63 trading days = 21 trading days/month × 3 months.</li>
 <li><strong>Top 3 / Bottom 3:</strong> With 11 sectors, selecting the top and bottom ~27% gives enough concentration to capture the momentum effect while maintaining minimal diversification across the long and short books.</li>
-<li><strong>100 shares per leg:</strong> Consistent with prior course assignments; provides a clean and comparable position size.</li>
-<li><strong>Entry at open:</strong> The momentum signal is observable from the prior day’s close. The open is the first tradeable price after the signal is formed — no lookahead.</li>
+<li><strong>100 shares per leg:</strong> I chose 100 shares per trade, because its what we have done until now, but we could definetly improve the strategy by changing this, it makes it easier to compare between trades.</li>
+<li><strong>Entry at open:</strong> The momentum signal is observable from the prior day’s close. The open is the first tradeable price after the signal is formed, this is just for the no lookahead I have been mentioning.</li>
 </ul>
 <hr>
 </section>
@@ -280,7 +278,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="exit-orders">Exit Orders</h2>
 <section id="how-we-exit-a-position" class="level3">
 <h3 class="anchored" data-anchor-id="how-we-exit-a-position">How We Exit a Position</h3>
-<p>Each position leg has two possible fates:</p>
+<p>Each position leg has two possible exit possibilities:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 31%">
@@ -288,14 +286,14 @@ window.Quarto = {
 </colgroup>
 <thead>
 <tr class="header">
-<th>Fate</th>
+<th>Exit</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><strong>Rebalance</strong></td>
-<td>Position held for the full month; closed at the <strong>close</strong> of the last trading day of the month</td>
+<td>The position is held for the full month, and it is closed at the <strong>close</strong> of the last trading day of the month</td>
 </tr>
 <tr class="even">
 <td><strong>Stop-Loss</strong></td>
@@ -314,8 +312,8 @@ window.Quarto = {
 <section id="parameter-justification-1" class="level3">
 <h3 class="anchored" data-anchor-id="parameter-justification-1">Parameter Justification</h3>
 <ul>
-<li><strong>Stop-loss = 8%:</strong> Sector ETFs are broadly diversified instruments — intra-month moves exceeding 8% are rare under normal market conditions and typically signal a structural shift in that sector rather than noise. A loss of this magnitude indicates the momentum thesis for that leg has broken down and continued holding is not justified.</li>
-<li><strong>Monthly hold:</strong> Cross-sectional momentum is documented to persist over 1–12 month horizons. Monthly rebalancing captures the signal while keeping transaction costs reasonable.</li>
+<li><strong>Stop-loss = 8%:</strong> Sector ETFs are broadly diversified instruments, where intra-month moves exceeding 8% are rare under normal market conditions and typically signal a structural shift in that sector rather than noise. A loss of this magnitude indicates the momentum thesis for that leg has broken down and continued holding is not justified.</li>
+<li><strong>Monthly hold:</strong> Cross-sectional momentum is documented to persist over 1–12 month horizons in research and academia. Monthly rebalancing captures the signal while keeping transaction costs reasonable and makes it easy and stable.</li>
 <li><strong>Exit at close on stop-loss day:</strong> Because we use daily (not intraday) data, we conservatively assume the stop-loss fills at the closing price on the breach day. This slightly overstates the loss versus an intraday trigger, which is the correct conservative assumption.</li>
 </ul>
 <hr>
@@ -325,7 +323,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="performance">Performance</h2>
 <section id="portfolio-nav-vs-spy" class="level3">
 <h3 class="anchored" data-anchor-id="portfolio-nav-vs-spy">Portfolio NAV vs SPY</h3>
-<p>Both series are normalized to $100,000 starting on the first actual trade date (September 3, 2024) for a fair comparison.</p>
+<p>Both series are normalized to $100,000 starting on the first actual trade date (September 3, 2024) for a fair comparison. We can see that we significantly underperfom the S&amp;P, the past 2 years have been very bullish, this causes issues that will mention in the discussion</p>
 <iframe src="charts/nav_vs_spy.html" width="100%" height="520px" style="border:none;"></iframe>
 </section>
 <section id="monthly-returns-strategy-vs-spy" class="level3">
@@ -476,17 +474,16 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="strategy-monitoring">Strategy Monitoring</h2>
 <section id="how-will-we-know-the-strategy-is-performing-in-line-with-expectations" class="level3">
 <h3 class="anchored" data-anchor-id="how-will-we-know-the-strategy-is-performing-in-line-with-expectations">How will we know the strategy is performing in line with expectations?</h3>
-<p>We monitor two real-time metrics at each monthly rebalance:</p>
-<p><strong>1. Rolling 6-Month Sharpe Ratio</strong> — if it drops below <strong>0.5 for three consecutive months</strong>, the strategy is underperforming its historical risk-adjusted baseline and requires a full review. This does not automatically mean we shut down — a macro regime shift may explain it — but it triggers a structured reassessment.</p>
-<p><strong>2. Momentum Spread</strong> (avg momentum of top-3 minus avg momentum of bottom-3) — if this spread compresses below <strong>2% for three consecutive months</strong>, sectors are moving together and the cross-sectional rotation signal has effectively disappeared. We would reduce position size in this scenario.</p>
+<p>We monitor two real-time metrics at each monthly rebalance to determine if we should stop at any given moment:</p>
+<p><strong>1. Rolling 6-Month Sharpe Ratio</strong> : if it drops below <strong>0.5 for three consecutive months</strong>, the strategy is underperforming its historical risk-adjusted baseline and requires us to give it a full review to understand what is going on. Maybe this change is caused by a macro regime change, but it might mean we have to adjust the strategy.</p>
+<p><strong>2. Momentum Spread</strong> (avg momentum of top-3 minus avg momentum of bottom-3), if this spread compresses below <strong>2% for three consecutive months</strong>, sectors are moving together and the cross-sectional rotation signal has effectively disappeared. We might have to reduce trading size if this happens</p>
 </section>
 <section id="how-will-we-know-when-the-strategy-stops-working" class="level3">
 <h3 class="anchored" data-anchor-id="how-will-we-know-when-the-strategy-stops-working">How will we know when the strategy stops working?</h3>
-<p>We declare the strategy <strong>non-functional and halt trading</strong> if any one of these triggers fires:</p>
+<p>We declare the strategy <strong>non-functional and we stop trading</strong> if any one of these 2 triggers happen:</p>
 <ol type="1">
-<li><p><strong>Momentum reversal:</strong> The long portfolio underperforms the short portfolio for <strong>4 consecutive months</strong> — meaning the momentum effect has fully reversed and our thesis no longer holds.</p></li>
-<li><p><strong>Win rate collapse:</strong> Leg win rate drops below <strong>40% for 3 consecutive months</strong> — if fewer than 2 of 6 legs are profitable per month, the ranking signal is no longer predictive.</p></li>
-<li><p><strong>Drawdown breach:</strong> Portfolio drawdown exceeds <strong>-20%</strong> at any point — a hard risk limit beyond which the expected recovery time exceeds what a rational investor should tolerate.</p></li>
+<li><p><strong>Momentum reversal:</strong> The long portfolio underperforms the short portfolio for <strong>4 consecutive months</strong>, this would mean the momentum effect has fully reversed and our hypothesis doesn’t hold anymore.</p></li>
+<li><p><strong>Win rate collapse:</strong> If the leg win rate drops below <strong>40% for 3 consecutive months</strong>, if fewer than 2 of 6 legs are profitable per month, this would mean the ranking signal is no longer predictive.</p></li>
 </ol>
 <hr>
 </section>
@@ -495,24 +492,20 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="commentary">Commentary</h2>
 <section id="did-the-strategy-work" class="level3">
 <h3 class="anchored" data-anchor-id="did-the-strategy-work">Did the strategy work?</h3>
-<p>The long book worked. A 58.7% win rate on long legs confirms that ranking sectors by trailing 3-month momentum does identify genuine near-term winners. The momentum spread chart reinforces this — the cross-sectional dispersion between sectors was consistently large (8–27% every month), meaning the signal was always present and strong.</p>
-<p>The short book did not work in this backtest period. A 39.7% win rate on short legs means we were wrong 60% of the time when betting against sectors. The cumulative P&amp;L decomposition chart tells the story clearly: the long book generated roughly +$4,800 in cumulative P&amp;L while the short book lost roughly -$4,000, leaving the total strategy nearly flat.</p>
+<p>Okay so clearly the strategy didn’t work as well as expected, we only got a 0.45% annual GMRR, vs the SPY got 19.62%. So this is a clear underperformance, but when we look at it deeper, we can see that the long book did work, it had a win rate of 58.7%, this means that the strategy is correctly identifying the winners. The signal was present all along, with cross sectional dispersion between sectors consistlently large (8-27% every month).</p>
+<p>On the other hand, the short book did not work, thats why the overall strategy failed, the short book had a 39.7% win rate. The long book generated around $4800 in cumulative PnL, wheeras the short book lost roughly -$4000. This erased all of our returns</p>
 </section>
 <section id="why-did-the-short-book-fail" class="level3">
 <h3 class="anchored" data-anchor-id="why-did-the-short-book-fail">Why did the short book fail?</h3>
-<p>The 2024–2026 backtest window was an unusually persistent bull market. Cross-sectional momentum is a <strong>relative</strong> signal — it tells you which sectors outperform each other, not which sectors decline in absolute terms. In a regime where all 11 sectors rise, even the “worst” ranked sectors still go up. Shorting them is systematically unprofitable because “weakest momentum” does not equal “negative return” in a bull market.</p>
-<p>This is not a flaw in the strategy design — it is an honest empirical finding about regime dependency. The same strategy applied during a bear market or high-dispersion regime would likely show very different short book performance.</p>
-</section>
-<section id="the-april-2025-event" class="level3">
-<h3 class="anchored" data-anchor-id="the-april-2025-event">The April 2025 event</h3>
-<p>The sharp drawdown in March–April 2025 corresponds to the tariff shock. During this event, all 11 sector ETFs dropped simultaneously — cross-sector correlation spiked toward 1.0. In this regime, the long book got hit hard while the short book did not compensate enough because the bottom-ranked sectors also dropped alongside the top-ranked ones. This illustrates that long-short sector strategies lose their market-neutral property during correlation spikes — a tail risk that the Sharpe ratio alone does not capture.</p>
+<p>So looking a bit deeper as to why the short book failed I believe the following: from 2024 to 2026, we had a very bullish market, since cross sectional momentum is a relative signal, its telling you how the outperfom each other (the ranking). If the market is very bullish, even the bottom 3 might still go up. Shorting these bottom 3 was unprofitable, because the ones with the weakest momentum aren’t necessary equal to negative return in a bull market.</p>
+<p>For example, if it had been a bear market we would have had the same issue with the top 3 of the ranking. So i believe that this strategy works better during more volatile market, where there is clear winners and losers. ### The April 2025 event</p>
+<p>For example, in April 2025, when Trump announced the Tariffs, all 11 sectors dropped simultaneously and the cross sector correlation spiked towards 1. The long book got hit hard the short book did not compensate. It just shows once again that the strategy is market neutral.</p>
 </section>
 <section id="how-would-we-improve-the-model" class="level3">
 <h3 class="anchored" data-anchor-id="how-would-we-improve-the-model">How would we improve the model?</h3>
-<p><strong>1. Market regime filter:</strong> When SPY is below its 200-day SMA (bear regime), go long-only on the top 3 and hold cash instead of shorting. This avoids the structural short drag in bull markets without changing the core momentum thesis. This improvement was identified before running the backtest but not implemented to preserve methodological integrity — implementing it after seeing the results would constitute data snooping.</p>
-<p><strong>2. Inverse-volatility position sizing:</strong> Instead of 100 shares per leg, allocate capital so each leg contributes equal risk. High-volatility sectors like XLE currently receive the same share count as low-volatility sectors like XLP, creating an implicit risk concentration.</p>
-<p><strong>3. Extended lookback:</strong> Combine the 3-month signal with a 12-month signal and skip the most recent month — the standard Fama-French momentum factor construction. This may reduce noise while preserving the longer-term trend signal.</p>
-<p><strong>4. Transaction cost modeling:</strong> Add a realistic cost per share (e.g., $0.005) to each leg to assess whether the strategy survives after execution friction. With 126 legs over 21 months, transaction costs are non-trivial.</p>
+<p><strong>1. Market regime filter:</strong> In order to improve the main flaw of this strategy we can do the following: When the SPY is above its 200 day moving average (bull market), the strategy would go long only on the top 3 sectors, and not short on any. Whereas if its below the 200 day moving average, we would run the strategy asn normal, long top 3, short bottom 3. This is where the cross sectional momentum would be the most powerful, we wouldn’t be abadoning the strategy.</p>
+<p><strong>2. Inverse-volatility position sizing:</strong> Instead of 100 shares per leg, allocate capital so each leg contributes equal risk. High-volatility sectors like Energy currently receive the same share count as low-volatility sectors like Consumer Staples, creating an implicit risk concentration.</p>
+<p><strong>4. Transaction cost modeling:</strong> Maybe we could aslo add a realistic cost per share (e.g., $0.005) to each leg to assess whether the strategy survives after execution costs.</p>
 
 
 </section>
