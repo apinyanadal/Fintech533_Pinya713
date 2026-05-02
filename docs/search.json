@@ -7,6 +7,69 @@
     "text": "Barcelona Logo"
   },
   {
+    "objectID": "FinalProject_SectorMomentum.html",
+    "href": "FinalProject_SectorMomentum.html",
+    "title": "Final Project: Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "",
+    "text": "This strategy exploits cross-sectional momentum across the 11 SPDR sector ETFs. Each month, we rank all 11 sectors by their trailing 3-month price return. We go long the top 3 (strongest momentum) and short the bottom 3 (weakest momentum), holding for one calendar month before rebalancing.\nMarket phenomenon being captured: Sector momentum — institutional capital rotates slowly and persistently across economic sectors in response to macro cycle shifts. Sectors that have been winning recently tend to continue winning in the near term because institutional flows are slow to adjust (Jegadeesh & Titman, 1993).\nStrategy parameters (frozen before any backtest results were observed): - Lookback: 63 trading days (~3 calendar months) - Universe: 11 SPDR sector ETFs - Positions: Long top 3, Short bottom 3, 100 shares each leg - Hold: one calendar month - Stop-loss: 8% per leg - Risk-free rate: 3.75% (course specification)"
+  },
+  {
+    "objectID": "FinalProject_SectorMomentum.html#strategy-overview",
+    "href": "FinalProject_SectorMomentum.html#strategy-overview",
+    "title": "Final Project: Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "",
+    "text": "This strategy exploits cross-sectional momentum across the 11 SPDR sector ETFs. Each month, we rank all 11 sectors by their trailing 3-month price return. We go long the top 3 (strongest momentum) and short the bottom 3 (weakest momentum), holding for one calendar month before rebalancing.\nMarket phenomenon being captured: Sector momentum — institutional capital rotates slowly and persistently across economic sectors in response to macro cycle shifts. Sectors that have been winning recently tend to continue winning in the near term because institutional flows are slow to adjust (Jegadeesh & Titman, 1993).\nStrategy parameters (frozen before any backtest results were observed): - Lookback: 63 trading days (~3 calendar months) - Universe: 11 SPDR sector ETFs - Positions: Long top 3, Short bottom 3, 100 shares each leg - Hold: one calendar month - Stop-loss: 8% per leg - Risk-free rate: 3.75% (course specification)"
+  },
+  {
+    "objectID": "FinalProject_SectorMomentum.html#anti-lookahead-design-critical",
+    "href": "FinalProject_SectorMomentum.html#anti-lookahead-design-critical",
+    "title": "Final Project: Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Anti-Lookahead Design — Critical",
+    "text": "Anti-Lookahead Design — Critical\nThe momentum signal is computed as:\nmomentum[t] = close[t-1] / close[t-1-63] - 1\nThe .shift(1) ensures we use yesterday’s close, not today’s. This means: - On rebalance date d (when we enter at the open), the signal uses close[d-1] - close[d-1] is always available before the market opens on d — zero lookahead - We never use the open or close of the entry day itself to rank sectors\nThis is the same principle as the entry logic in HW2 (comparing opening price to the previous period’s close to decide direction).\n\n#### Momentum Signal (no lookahead)\n\n#### Work only with sector close prices (drop trd_prd helper column)\ncloses = close_panel[SECTORS].copy()\n\n#### shift(1): use yesterday's close so signal is fully formed before today's open\n#### This is the anti-lookahead shift — without it we'd be using information\n#### not yet available at the moment of trade entry.\nprev_close = closes.shift(1)\n\n#### 3-month trailing momentum for each sector on each calendar day\n#### momentum[d] = prev_close[d] / prev_close[d-63] - 1\n####             = close[d-1]    / close[d-1-63]    - 1   ← all pre-entry data\nmomentum = prev_close / prev_close.shift(LOOKBACK_DAYS) - 1\n\n#### Sanity check: on each rebalance date, verify momentum only uses past closes\nsample_date = rebalance_dates[5]\nprint(f'Momentum signal on {sample_date.date()} (enters at market open):')\nprint(momentum.loc[sample_date].sort_values(ascending=False).round(4))\nprint(f'\\nSignal uses closes from {(sample_date - pd.tseries.offsets.BDay(64)).date()}'\n      f' to {(sample_date - pd.tseries.offsets.BDay(1)).date()} — all pre-open data ✓')\n\nMomentum signal on 2025-02-03 (enters at market open):\nXLY     0.1595\nXLC     0.1093\nXLF     0.0970\nXLI     0.0201\nXLE    -0.0023\nXLV    -0.0103\nXLK    -0.0107\nXLU    -0.0177\nXLP    -0.0178\nXLRE   -0.0546\nXLB    -0.0567\nName: 2025-02-03 00:00:00, dtype: float64\n\nSignal uses closes from 2024-11-05 to 2025-01-31 — all pre-open data ✓"
+  },
+  {
+    "objectID": "FinalProject_SectorMomentum.html#q1-how-will-we-know-the-strategy-is-performing-in-line-with-expectations",
+    "href": "FinalProject_SectorMomentum.html#q1-how-will-we-know-the-strategy-is-performing-in-line-with-expectations",
+    "title": "Final Project: Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Q1: How will we know the strategy is performing in line with expectations?",
+    "text": "Q1: How will we know the strategy is performing in line with expectations?\nWe monitor two real-time metrics at each monthly rebalance:\n\nRolling 6-Month Sharpe Ratio (see Plot 7): if it drops below 0.5 for three consecutive months, the strategy is underperforming its historical risk-adjusted baseline and requires a full review (not automatic shutdown — macro regime may explain it).\nMomentum Spread (see Plot 9): the average 3-month return of the long basket minus the average 3-month return of the short basket. If this spread compresses below 2% for three consecutive months, sectors are moving together — the cross-sectional momentum signal has effectively disappeared, and we should reduce position size."
+  },
+  {
+    "objectID": "FinalProject_SectorMomentum.html#q2-how-will-we-know-when-the-strategy-stops-working",
+    "href": "FinalProject_SectorMomentum.html#q2-how-will-we-know-when-the-strategy-stops-working",
+    "title": "Final Project: Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Q2: How will we know when the strategy stops working?",
+    "text": "Q2: How will we know when the strategy stops working?\nWe declare the strategy non-functional and halt trading if any one of the following triggers fires:\n\nMomentum reversal: the long portfolio underperforms the short portfolio (i.e., the momentum effect has reversed) for 4 consecutive months. This means the market has shifted to a mean-reversion regime where recent winners become losers — the opposite of our thesis.\nWin rate collapse: leg win rate drops below 40% for 3 consecutive months. If fewer than 2 of 6 legs are profitable in a given month, the classifier is no longer predictive and the signal has degraded below random.\nDrawdown breach: portfolio drawdown exceeds -20% at any point. This is a hard risk limit — at this level of loss, the strategy’s expected recovery time exceeds what a rational investor should tolerate."
+  },
+  {
+    "objectID": "FinalProject_SectorMomentum.html#did-filtering-stop-losses-improve-performance",
+    "href": "FinalProject_SectorMomentum.html#did-filtering-stop-losses-improve-performance",
+    "title": "Final Project: Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Did Filtering (Stop-Losses) Improve Performance?",
+    "text": "Did Filtering (Stop-Losses) Improve Performance?\nDiscuss how many legs were stopped out vs. held to month-end, and whether the stop-loss improved or hurt overall returns. A stop-loss that fires frequently suggests the ETFs are choppy intra-month and the 8% threshold may need adjustment. A stop-loss that almost never fires suggests it provides tail insurance at no cost."
+  },
+  {
+    "objectID": "FinalProject_SectorMomentum.html#what-did-the-longshort-decomposition-reveal",
+    "href": "FinalProject_SectorMomentum.html#what-did-the-longshort-decomposition-reveal",
+    "title": "Final Project: Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "What Did the Long/Short Decomposition Reveal?",
+    "text": "What Did the Long/Short Decomposition Reveal?\nRefer to Plot 4. If the long book drove all returns and the short book was a drag, the strategy may be more of a ‘quality long’ strategy in disguise rather than a genuine cross-sectional momentum strategy. If both contribute, the market-neutral long-short thesis is confirmed."
+  },
+  {
+    "objectID": "FinalProject_SectorMomentum.html#which-sectors-were-most-useful",
+    "href": "FinalProject_SectorMomentum.html#which-sectors-were-most-useful",
+    "title": "Final Project: Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Which Sectors Were Most Useful?",
+    "text": "Which Sectors Were Most Useful?\nRefer to Plot 6. Sectors with consistently positive average returns contributed alpha. Sectors with consistently negative average returns are potential candidates for removal from the universe in a future version, though this should only be done with out-of-sample validation to avoid data snooping."
+  },
+  {
+    "objectID": "FinalProject_SectorMomentum.html#how-would-we-improve-the-model",
+    "href": "FinalProject_SectorMomentum.html#how-would-we-improve-the-model",
+    "title": "Final Project: Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "How Would We Improve the Model?",
+    "text": "How Would We Improve the Model?\n\nInverse-volatility position sizing: instead of 100 shares per leg, allocate more capital to lower-volatility sectors so that each leg contributes equal risk. This avoids the current implicit over-weight toward high-volatility sectors like XLE.\nExtended lookback: combine the 3-month signal with a 12-month signal and skip the most recent month (the standard Fama-French momentum factor construction). This may reduce noise while preserving the longer-term trend signal.\nMacro regime filter: reduce position size or go flat when VIX is above a threshold (e.g., 30). During high-fear regimes, sectors converge and the rotation signal becomes less reliable — this was validated in our Choppiness Index work during the Donchian assignment.\nTransaction cost modeling: add a realistic cost per share (e.g., $0.005) to each leg to assess whether the strategy survives after execution friction."
+  },
+  {
     "objectID": "breakout.html",
     "href": "breakout.html",
     "title": "Breakout Strategy — QQQ",
@@ -222,5 +285,110 @@
     "title": "Breakout Strategy — QQQ (Nasdaq-100 ETF)",
     "section": "16 — Export Charts as JSON for Website",
     "text": "16 — Export Charts as JSON for Website\n\nimport os, json\n\n###  output — save charts as JSON for the Quarto website\n\nos.makedirs('charts', exist_ok=True)\n\n# Build Plotly blotter table for the website\nfig_blotter_web = go.Figure(data=[go.Table(\n    header=dict(\n        values=['Entry Date','Exit Date','Direction','Qty',\n                'Entry $','Exit $','Days','Outcome','P&L'],\n        fill_color='#1a1a2e',\n        font=dict(color='white', size=11),\n        align='center',\n    ),\n    cells=dict(\n        values=[\n            blotter_export['entry_date'].astype(str),\n            blotter_export['exit_date'].astype(str),\n            blotter_export['direction_label'],\n            blotter_export['qty'],\n            blotter_export['entry_price'].round(2),\n            blotter_export['exit_price'].round(2),\n            blotter_export['days_held'],\n            blotter_export['outcome'],\n            blotter_export['pnl'].round(0).astype(int),\n        ],\n        fill_color=[\n            ['#0d0d1a'] * len(blotter_export)\n        ],\n        font=dict(color='white', size=10),\n        align='center',\n    )\n)])\nfig_blotter_web.update_layout(\n    paper_bgcolor='black',\n    font=dict(color='white'),\n    height=max(300, 35 * len(blotter_export) + 80)\n)\n\nchart_map = {\n    'chart_nav'         : fig_nav,\n    'chart_drawdown'    : fig_dd,\n    'chart_outcomes'    : fig_outcome,\n    'chart_vs_qqq'      : fig_qqq,\n    'chart_vs_spy'      : fig_spy,\n    'chart_walkforward' : fig_wf,\n    'chart_blotter'     : fig_blotter_web,\n}\n\nfor name, fig in chart_map.items():\n    with open(f'charts/{name}.json', 'w') as f:\n        json.dump(fig.to_dict(), f)\n\nprint(\"All chart JSON files saved to charts/\")\nprint(\"Copy the charts/ folder and blotter_qqq_breakout.csv to your Quarto site directory.\")"
+  },
+  {
+    "objectID": "final_project.html",
+    "href": "final_project.html",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "",
+    "text": "This project implements a cross-sectional sector momentum rotation strategy across the 11 SPDR sector ETFs that make up the S&P 500. The core idea is simple: rank all 11 sectors by their trailing 3-month price return, go long the top 3 strongest sectors, and short the bottom 3 weakest sectors. Rebalance every calendar month.\nMarket phenomenon being captured: Institutional capital rotates slowly and persistently across economic sectors in response to macro cycle shifts. Sectors that have been winning recently tend to continue winning in the near term because institutional flows are slow to adjust — a well-documented effect in academic finance known as cross-sectional momentum (Jegadeesh & Titman, 1993).\nUniverse: XLK, XLF, XLE, XLV, XLI, XLP, XLY, XLU, XLRE, XLB, XLC\nBacktest period: September 2024 — April 2026 (21 monthly rebalances)\nData source: IBKR via ShinyBroker — daily OHLCV bars, 2 years"
+  },
+  {
+    "objectID": "final_project.html#strategy-overview",
+    "href": "final_project.html#strategy-overview",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "",
+    "text": "This project implements a cross-sectional sector momentum rotation strategy across the 11 SPDR sector ETFs that make up the S&P 500. The core idea is simple: rank all 11 sectors by their trailing 3-month price return, go long the top 3 strongest sectors, and short the bottom 3 weakest sectors. Rebalance every calendar month.\nMarket phenomenon being captured: Institutional capital rotates slowly and persistently across economic sectors in response to macro cycle shifts. Sectors that have been winning recently tend to continue winning in the near term because institutional flows are slow to adjust — a well-documented effect in academic finance known as cross-sectional momentum (Jegadeesh & Titman, 1993).\nUniverse: XLK, XLF, XLE, XLV, XLI, XLP, XLY, XLU, XLRE, XLB, XLC\nBacktest period: September 2024 — April 2026 (21 monthly rebalances)\nData source: IBKR via ShinyBroker — daily OHLCV bars, 2 years"
+  },
+  {
+    "objectID": "final_project.html#entry-orders",
+    "href": "final_project.html#entry-orders",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Entry Orders",
+    "text": "Entry Orders\n\nHow We Enter a Position\nOn the first trading day of each calendar month, the strategy:\n\nComputes the 3-month trailing momentum for all 11 sector ETFs\nRanks sectors from strongest (rank 1) to weakest (rank 11)\nGoes long the top 3 ranked sectors at the market open\nGoes short the bottom 3 ranked sectors at the market open\n\n\n\nMomentum Signal Formula\n\\[\\text{Momentum}_t = \\frac{\\text{Close}_{t-1}}{\\text{Close}_{t-1-63}} - 1\\]\nThe signal uses yesterday’s close (not today’s), ensuring no lookahead bias — the ranking is fully formed before the market opens on the rebalance date.\n\n\nParameter Justification\n\nLookback = 63 trading days (~3 months): The 3-month momentum window is the most widely validated in academic literature. Shorter windows (1 month) capture noise; longer windows (12 months) lag the economic cycle too much. 63 trading days = 21 trading days/month × 3 months.\nTop 3 / Bottom 3: With 11 sectors, selecting the top and bottom ~27% gives enough concentration to capture the momentum effect while maintaining minimal diversification across the long and short books.\n100 shares per leg: Consistent with prior course assignments; provides a clean and comparable position size.\nEntry at open: The momentum signal is observable from the prior day’s close. The open is the first tradeable price after the signal is formed — no lookahead."
+  },
+  {
+    "objectID": "final_project.html#exit-orders",
+    "href": "final_project.html#exit-orders",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Exit Orders",
+    "text": "Exit Orders\n\nHow We Exit a Position\nEach position leg has two possible fates:\n\n\n\n\n\n\n\nFate\nDescription\n\n\n\n\nRebalance\nPosition held for the full month; closed at the close of the last trading day of the month\n\n\nStop-Loss\nPosition closed early at the daily close on the day the 8% threshold is breached\n\n\n\n\n\nStop-Loss Logic\n\nLong leg: Exit at close if close &lt; entry_price × (1 - 0.08)\nShort leg: Exit at close if close &gt; entry_price × (1 + 0.08)\n\n\n\nParameter Justification\n\nStop-loss = 8%: Sector ETFs are broadly diversified instruments — intra-month moves exceeding 8% are rare under normal market conditions and typically signal a structural shift in that sector rather than noise. A loss of this magnitude indicates the momentum thesis for that leg has broken down and continued holding is not justified.\nMonthly hold: Cross-sectional momentum is documented to persist over 1–12 month horizons. Monthly rebalancing captures the signal while keeping transaction costs reasonable.\nExit at close on stop-loss day: Because we use daily (not intraday) data, we conservatively assume the stop-loss fills at the closing price on the breach day. This slightly overstates the loss versus an intraday trigger, which is the correct conservative assumption."
+  },
+  {
+    "objectID": "final_project.html#performance",
+    "href": "final_project.html#performance",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Performance",
+    "text": "Performance\n\nPortfolio NAV vs SPY\nBoth series are normalized to $100,000 starting on the first actual trade date (September 3, 2024) for a fair comparison.\n\n\n\nMonthly Returns — Strategy vs SPY\n\n\n\nDrawdown\n\n\n\nRolling 6-Month Sharpe Ratio"
+  },
+  {
+    "objectID": "final_project.html#performance-summary",
+    "href": "final_project.html#performance-summary",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Performance Summary",
+    "text": "Performance Summary\n\n\n\nMetric\nStrategy\nSPY (Buy & Hold)\n\n\n\n\nTotal Return\n0.89%\n42.69%\n\n\nAnnual GMRR\n0.45%\n19.62%\n\n\nAnnual Volatility\n4.57%\n16.69%\n\n\nSharpe Ratio (rf=3.75%)\n-0.72\n0.95\n\n\nMax Drawdown\n~6.64%\n~19.00%"
+  },
+  {
+    "objectID": "final_project.html#trade-statistics",
+    "href": "final_project.html#trade-statistics",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Trade Statistics",
+    "text": "Trade Statistics\n\n\n\nMetric\nValue\n\n\n\n\nTotal legs traded\n126\n\n\nRebalance exits\n113 (89.7%)\n\n\nStop-loss exits\n13 (10.3%)\n\n\nOverall win rate\n49.2%\n\n\nLong leg win rate\n58.7%\n\n\nShort leg win rate\n39.7%\n\n\nAvg return per leg\n-0.054%\n\n\nExpected P&L per leg\n$7.07\n\n\nAvg holding period\n25.4 days"
+  },
+  {
+    "objectID": "final_project.html#blotter-ledger",
+    "href": "final_project.html#blotter-ledger",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Blotter & Ledger",
+    "text": "Blotter & Ledger\nThe complete trade log and daily NAV record are available for download below.\n⬇ Download Blotter (CSV)   ⬇ Download Ledger (CSV)"
+  },
+  {
+    "objectID": "final_project.html#sector-analysis",
+    "href": "final_project.html#sector-analysis",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Sector Analysis",
+    "text": "Sector Analysis\n\nSector Rotation Heatmap\nEach row is a rebalance month. Color shows 3-month momentum score (green = strong, red = weak). ▲ = long position, ▼ = short position.\n\n\n\nMonthly Sector Exposure\n\n\n\nAverage Return by Sector"
+  },
+  {
+    "objectID": "final_project.html#long-vs-short-decomposition",
+    "href": "final_project.html#long-vs-short-decomposition",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Long vs Short Decomposition",
+    "text": "Long vs Short Decomposition"
+  },
+  {
+    "objectID": "final_project.html#trade-return-distribution",
+    "href": "final_project.html#trade-return-distribution",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Trade Return Distribution",
+    "text": "Trade Return Distribution"
+  },
+  {
+    "objectID": "final_project.html#momentum-spread",
+    "href": "final_project.html#momentum-spread",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Momentum Spread",
+    "text": "Momentum Spread"
+  },
+  {
+    "objectID": "final_project.html#alpha-beta-analysis",
+    "href": "final_project.html#alpha-beta-analysis",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Alpha / Beta Analysis",
+    "text": "Alpha / Beta Analysis"
+  },
+  {
+    "objectID": "final_project.html#strategy-monitoring",
+    "href": "final_project.html#strategy-monitoring",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Strategy Monitoring",
+    "text": "Strategy Monitoring\n\nHow will we know the strategy is performing in line with expectations?\nWe monitor two real-time metrics at each monthly rebalance:\n1. Rolling 6-Month Sharpe Ratio — if it drops below 0.5 for three consecutive months, the strategy is underperforming its historical risk-adjusted baseline and requires a full review. This does not automatically mean we shut down — a macro regime shift may explain it — but it triggers a structured reassessment.\n2. Momentum Spread (avg momentum of top-3 minus avg momentum of bottom-3) — if this spread compresses below 2% for three consecutive months, sectors are moving together and the cross-sectional rotation signal has effectively disappeared. We would reduce position size in this scenario.\n\n\nHow will we know when the strategy stops working?\nWe declare the strategy non-functional and halt trading if any one of these triggers fires:\n\nMomentum reversal: The long portfolio underperforms the short portfolio for 4 consecutive months — meaning the momentum effect has fully reversed and our thesis no longer holds.\nWin rate collapse: Leg win rate drops below 40% for 3 consecutive months — if fewer than 2 of 6 legs are profitable per month, the ranking signal is no longer predictive.\nDrawdown breach: Portfolio drawdown exceeds -20% at any point — a hard risk limit beyond which the expected recovery time exceeds what a rational investor should tolerate."
+  },
+  {
+    "objectID": "final_project.html#commentary",
+    "href": "final_project.html#commentary",
+    "title": "Cross-Sectional Sector Momentum Rotation Strategy",
+    "section": "Commentary",
+    "text": "Commentary\n\nDid the strategy work?\nThe long book worked. A 58.7% win rate on long legs confirms that ranking sectors by trailing 3-month momentum does identify genuine near-term winners. The momentum spread chart reinforces this — the cross-sectional dispersion between sectors was consistently large (8–27% every month), meaning the signal was always present and strong.\nThe short book did not work in this backtest period. A 39.7% win rate on short legs means we were wrong 60% of the time when betting against sectors. The cumulative P&L decomposition chart tells the story clearly: the long book generated roughly +$4,800 in cumulative P&L while the short book lost roughly -$4,000, leaving the total strategy nearly flat.\n\n\nWhy did the short book fail?\nThe 2024–2026 backtest window was an unusually persistent bull market. Cross-sectional momentum is a relative signal — it tells you which sectors outperform each other, not which sectors decline in absolute terms. In a regime where all 11 sectors rise, even the “worst” ranked sectors still go up. Shorting them is systematically unprofitable because “weakest momentum” does not equal “negative return” in a bull market.\nThis is not a flaw in the strategy design — it is an honest empirical finding about regime dependency. The same strategy applied during a bear market or high-dispersion regime would likely show very different short book performance.\n\n\nThe April 2025 event\nThe sharp drawdown in March–April 2025 corresponds to the tariff shock. During this event, all 11 sector ETFs dropped simultaneously — cross-sector correlation spiked toward 1.0. In this regime, the long book got hit hard while the short book did not compensate enough because the bottom-ranked sectors also dropped alongside the top-ranked ones. This illustrates that long-short sector strategies lose their market-neutral property during correlation spikes — a tail risk that the Sharpe ratio alone does not capture.\n\n\nHow would we improve the model?\n1. Market regime filter: When SPY is below its 200-day SMA (bear regime), go long-only on the top 3 and hold cash instead of shorting. This avoids the structural short drag in bull markets without changing the core momentum thesis. This improvement was identified before running the backtest but not implemented to preserve methodological integrity — implementing it after seeing the results would constitute data snooping.\n2. Inverse-volatility position sizing: Instead of 100 shares per leg, allocate capital so each leg contributes equal risk. High-volatility sectors like XLE currently receive the same share count as low-volatility sectors like XLP, creating an implicit risk concentration.\n3. Extended lookback: Combine the 3-month signal with a 12-month signal and skip the most recent month — the standard Fama-French momentum factor construction. This may reduce noise while preserving the longer-term trend signal.\n4. Transaction cost modeling: Add a realistic cost per share (e.g., $0.005) to each leg to assess whether the strategy survives after execution friction. With 126 legs over 21 months, transaction costs are non-trivial."
   }
 ]
